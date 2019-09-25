@@ -3,22 +3,22 @@ import './App.css';
 import Game from './lib/Game';
 import { LEVELS } from './lib/levelConstants';
 import Cell from './Cell';
+import { newGame, nextTurn } from './lib/turnedBased';
 
 const App = () => {
-  const [game, setGame] = useState(new Game());
-  const [display, setDisplay] = useState(game.getDisplay());
+  const [game, setGame] = useState(newGame());
+  const { grid, status, done } = game;
 
   const onCellClick = (coords) => {
-    if (display.done) return;
-    game.revealCell(coords);
-    setDisplay(game.getDisplay())
+    if (done) return;
+    setGame(game => nextTurn(coords, game));
   };
 
   return (
     <div className="App">
-        <h2>{display.status}</h2>
+        <h2>{status}</h2>
           {
-            display.grid.map((row, x) =>
+            grid.map((row, x) =>
               <div className="gameRow" key={`row-${x}`}>
                 {
                   row.map((cell, y) =>
@@ -27,7 +27,7 @@ const App = () => {
                       revealed={cell.revealed}
                       value={cell.value}
                       onClick={() => {
-                        onCellClick({x, y})
+                        onCellClick([x, y])
                       }}
                     />
                   )
@@ -36,11 +36,11 @@ const App = () => {
             )
           }
         <div>
-          {/*{*/}
-          {/*  LEVELS.map(level =>*/}
-          {/*    <button onClick={() => setGame(new Game(level))}>{level}</button>*/}
-          {/*  )*/}
-          {/*}*/}
+          {
+            Object.keys(LEVELS).map(level =>
+              <button onClick={() => console.log(level)}>{level}</button>
+            )
+          }
         </div>
     </div>
   );

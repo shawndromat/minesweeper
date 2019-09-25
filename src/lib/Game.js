@@ -1,9 +1,6 @@
 import { LEVELS, sizes } from './levelConstants';
 import { EMPTY, MINE } from './cellConstants';
-
-const PLAYING = 'playing';
-const WON = 'won';
-const LOST = 'lost';
+import { PLAYING, LOST, WON } from './gameConstants';
 
 const containsCell = (arrayOfCells, targetCell) => {
   arrayOfCells.find(cell =>
@@ -53,7 +50,7 @@ export default class Game {
     this.boardSize = sizes[level].boardSize;
     this.numMines = sizes[level].numMines;
     const mineCoords = Game.generateMines(this.numMines, this.boardSize);
-    this.grid = Game.buildGrid(10, mineCoords);
+    this.grid = Game.buildGrid(this.boardSize, mineCoords);
     this.status = PLAYING;
   }
 
